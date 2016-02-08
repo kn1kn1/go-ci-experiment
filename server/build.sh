@@ -4,9 +4,13 @@ BUILD_VERSION=1.0.0
 #BUILD_VERSION=`git describe --always --dirty`
 BUILD_DATE=`date +%FT%T%z`
 
-GOOS=darwin;GOARCH=amd64;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o build/${GOOS}_${GOARCH}/main main.go
-GOOS=windows;GOARCH=amd64;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o build/${GOOS}_${GOARCH}/main main.go
-GOOS=windows;GOARCH=386;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o build/${GOOS}_${GOARCH}/main main.go
-GOOS=linux;GOARCH=amd64;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o build/${GOOS}_${GOARCH}/main main.go
-GOOS=linux;GOARCH=386;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o build/${GOOS}_${GOARCH}/main main.go
-GOOS=linux;GOARCH=arm;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o build/${GOOS}_${GOARCH}/main main.go
+SRC_DIR=.
+OUT_DIR=build
+
+mkdir $OUT_DIR
+export GOOS=darwin;export GOARCH=amd64;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=windows;export GOARCH=amd64;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=windows;export GOARCH=386;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=linux;export GOARCH=amd64;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=linux;export GOARCH=386;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=linux;export GOARCH=arm;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
