@@ -1,0 +1,34 @@
+# install golang
+pushd ~/
+export GOLANG_VERSION=1.5.3
+export GOLANG_DOWNLOAD_URL=https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
+export GOLANG_DOWNLOAD_SHA256=43afe0c5017e502630b1aea4d44b8a7f059bf60d7f29dfd58db454d4e4e0ae53
+
+curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
+	&& echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c - \
+	&& tar xzf golang.tar.gz \
+	&& rm golang.tar.gz
+
+export GOROOT=~/go
+export PATH=$GOROOT/bin:$PATH
+popd
+
+go version
+go env
+
+# build
+BUILD_VERSION=`git describe --always --dirty`
+echo BUILD_VERSION: $BUILD_VERSION
+BUILD_DATE=`date +%FT%T%z`
+echo BUILD_DATE: $BUILD_DATE
+
+SRC_DIR=server
+OUT_DIR=artifacts
+
+mkdir $OUT_DIR
+export GOOS=darwin;export GOARCH=amd64;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=windows;export GOARCH=amd64;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=windows;export GOARCH=386;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=linux;export GOARCH=amd64;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=linux;export GOARCH=386;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
+export GOOS=linux;export GOARCH=arm;go build -ldflags "-X main.BuildVersion=$BUILD_VERSION -X main.BuildDate=$BUILD_DATE" -o ${OUT_DIR}/${GOOS}_${GOARCH}/main ${SRC_DIR}/main.go
